@@ -25,9 +25,9 @@ fpkm_x<-fpkm[which(rownames(fpkm) %in% x_genes),]
 fpkm_y<-fpkm[which(rownames(fpkm) %in% y_genes),]
 
 if(dataset=="Yintro_exp1"){
-	cross_types<-c("CCPP","CPLY","WWLL","WLPY")
+	cross_types<-c("CCPP","CPLY","WLPY","WWLL")
 } else if(dataset=="Yintro_exp2"){
-	cross_types<-c("PLPY","PPLL","LPLY","LLPP")
+	cross_types<-c("PLPY","PPLL","LLPP","LPLY")
 } else{
 	stop("Invalid dataset; must be 'Yintro_exp1' or 'Yintro_exp2'")
 }
@@ -90,9 +90,11 @@ pdf(paste("chr_type_expression_ratios.boxplots", dataset, cell_type, "pdf", sep=
 px<-ggplot(ratio_xa_df, aes(x=group, y=ratio)) + geom_boxplot() + geom_quasirandom()
 px<-px + labs(title="Median expression ratio X:auto", x="", y="X:auto") + theme_minimal()
 px<-px + theme(axis.text=element_text(size=18), axis.title=element_text(size=21), plot.title=element_text(size=28))
+px<-px + scale_x_discrete(limits=cross_types) + ylim(0,1)
 py<-ggplot(ratio_ya_df, aes(x=group, y=ratio)) + geom_boxplot() + geom_quasirandom()
 py<-py + labs(title="Median expression ratio Y:auto", x="", y="Y:auto") + theme_minimal()
 py<-py + theme(axis.text=element_text(size=18), axis.title=element_text(size=21), plot.title=element_text(size=28))
+py<-py + scale_x_discrete(limits=cross_types) + ylim(0,1)
 print(px)
 print(py)
 dev.off()

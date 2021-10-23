@@ -4,7 +4,7 @@ library(ggplot2)
 library(ggbeeswarm)
 
 dataset<-"Yintro_exp2"
-cell_type<-"RS"
+cell_type<-"LZ"
 
 #Read in data
 fpkm_data<-read.table(paste("fpkm_filtered_table",dataset,cell_type,"97.txt", sep="."), header=TRUE)
@@ -27,7 +27,7 @@ if(dataset=="Yintro_exp1"){
                 stop("Invalid cell type: must be 'LZ' or 'RS'")
         }
 } else if(dataset=="Yintro_exp2"){
-        cross_types<-list(c("PPLL","PLPY"), c("LLPP","PLPY"), c("LLPP","LPLY"), c("LPLY","PPLL"))
+        cross_types<-list(c("PPLL","PLPY"), c("LLPP","PLPY"), c("LLPP","LPLY"), c("PPLL","LPLY"))
         names(cross_types)<-c("musX","musY","domX","domY")
         if(cell_type=="LZ"){
                 musX<-read.table("topDEgenes.lrt.DE.PPLL_LZvsPPLLPY_LZ.txt", header=TRUE, fill=TRUE)

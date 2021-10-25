@@ -2,14 +2,14 @@
 #PURPOSE: Run salmon quant for alignment-independent RNAseq quantification
 #
 # Job name:
-#SBATCH --job-name=salmon_quant_ISR
-#SBATCH --output=salmon_quant.libTypeISR-%j.log
+#SBATCH --job-name=salmon_quant_IU
+#SBATCH --output=salmon_quant.libTypeIU-%j.log
 #SBATCH --mail-type=ALL # Mail events (NONE, BEGIN, END, FAIL, ALL)
 ##SBATCH --mail-user=ekopania4@gmail.com # Where to send mail
 #SBATCH --cpus-per-task=8 # Number of cores per MPI rank (ie number of threads, I think)
 #SBATCH --nodes=1 #Number of nodes
 #SBATCH --ntasks=1 # Number of MPI ranks (ie number of processes, I think)
-#SBATCH --mem-per-cpu=8G #Not sure if I should mess with these...
+#SBATCH --mem-per-cpu=32G #Not sure if I should mess with these...
 #SBATCH --mem=0 #Not sure if I should mess with these...
 # Partition:
 ## Since you want to run it on 72 cores, the partition good_cpu has nodes with 72 cores.
@@ -17,6 +17,8 @@
 ##SBATCH -w, --nodelist=compute-0-4 # run on a specific node
 #
 ## Command(s) to run:
+source ~/software/anaconda/anaconda3/bin/activate
+conda activate ek_main_enviro
 echo "Running salmon quant..."
 
 ls /mnt/beegfs/ek112884/amplicon_expression_analysis/DATA_LarsonEtAl2017/RAW_DATA/merged/*1P.fq.gz | while read file; do #Loop through all trimmed read 1 fastq files (unaligned sequence reads, post-trimmomatic) 
@@ -27,8 +29,17 @@ ls /mnt/beegfs/ek112884/amplicon_expression_analysis/DATA_LarsonEtAl2017/RAW_DAT
 	echo "${file2}"
 	#fileU="${long_name}_1U.fq.gz" #include unpaired forward reads
 	#echo "${fileU}"
+	#NOTE: --validateMappings deprecated in version 1.5 and higher; selective alignment mode (which this flag used to invoke) is now the default
+        #NOTE: cannot combine PE and SE data (don't use -r flag with -1 and -2 flags)
+        #PE reads, ISR library type, use pre-made mm10 index from salmon's refgenie site
+        #http://refgenomes.databio.org/v3/assets/splash/0f10d83b1050c08dd53189986f60970b92a315aa7a16a6f1/salmon_sa_index?tag=default
+        #salmon quant -p 8 -i /mnt/beegfs/ek112884/REFERENCE_DIR/refgenie_genome_folder/alias/mm10/salmon_sa_index/default/ -l ISR -1 "${file}" -2 "${file2}" -o "${sample}.salmon_output_libTypeISR_premadeIndex"
+	#PE reads, ISF library type, use pre-made mm10 index from salmon's refgenie site
+	#salmon quant -p 8 -i /mnt/beegfs/ek112884/REFERENCE_DIR/refgenie_genome_folder/alias/mm10/salmon_sa_index/default/ -l ISF -1 "${file}" -2 "${file2}" -o "${sample}.salmon_output_libTypeISF_premadeIndex"
+	#PE reads, IU (unstranded) library type, use pre-made mm10 index from salmon's refgenie site
+	salmon quant -p 8 -i /mnt/beegfs/ek112884/REFERENCE_DIR/refgenie_genome_folder/alias/mm10/salmon_sa_index/default/ -l IU -1 "${file}" -2 "${file2}" -o "${sample}.salmon_output_libTypeIU_premadeIndex"
 	#PE reads - automatic library type detection
-	salmon quant -p 8 -i salmon_index.GRCm38.idx -l ISR -1 "${file}" -2 "${file2}" --validateMappings -o "${sample}.salmon_output_libTypeISR"
+	#salmon quant -p 8 -i salmon_index.GRCm38.idx -l ISR -1 "${file}" -2 "${file2}" --validateMappings -o "${sample}.salmon_output_libTypeISR"
 	#PE reads
 	#-l flag is library type; ISF means inwards, stranded, read1 is forward
 	#More info on salmon lib types: https://salmon.readthedocs.io/en/latest/library_type.html#fraglibtype

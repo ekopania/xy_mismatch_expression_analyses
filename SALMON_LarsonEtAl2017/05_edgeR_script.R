@@ -18,7 +18,7 @@ dataset<-"LarsonEtal"
 #cell_type<-"LZ"
 cell_type<-"RS"
 #Percent ID threshold for considering genes paralogs/part of the same gene family
-paralog_thresh<-90
+paralog_thresh<-97
 
 print("Loading R libraries...")
 library(edgeR)

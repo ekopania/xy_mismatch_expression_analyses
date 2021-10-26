@@ -15,13 +15,13 @@ min_samples<-4 #4 #16
 #Using Larson et al. 2017 cell sorted F1s as a test at first; will eventually use the Y introgression data
 #dataset<-"LarsonEtal"
 #dataset<-"Yintro"
-#dataset<-"Yintro_exp1"
-dataset<-"Yintro_exp2"
+dataset<-"Yintro_exp1"
+#dataset<-"Yintro_exp2"
 #cell_type<-"LZandRS"
 #cell_type<-"LZ"
 cell_type<-"RS"
 #Percent ID threshold for considering genes paralogs/part of the same gene family
-paralog_thresh<-90
+paralog_thresh<-97
 
 print("Loading R libraries...")
 library(edgeR)
@@ -33,8 +33,12 @@ library(matrixStats)
 
 print("Setting up DGE object...")
 #files<-list.files(pattern=".counts.txt$")
-mydata<-read.table("salmon_output.counts.txt")
-mylengths<-read.table("salmon_output.lengths.txt")
+#OLD - No decoys for salmon mapping
+#mydata<-read.table("salmon_output.counts.txt")
+#mylengths<-read.table("salmon_output.lengths.txt")
+#New version with Salmon's premade mm10 index that includes decoys
+mydata<-read.table("salmon_output.counts.premadeIndex.txt")
+mylengths<-read.table("salmon_output.lengths.premadeIndex.txt")
 #For Y intro data, 1=CCPP_LZ, 2=CCPP_RS, 3=CCPPLY_LZ, 4=CCPPLY_RS, 5=LLPP_LZ, 6=LLPP_RS, 7=LLPPLY_LZ, 8=LLPPLY_RS, 9=PPLLPY_LZ, 10=PPLLPY_RS, 11=PPLL_LZ, 12=PPLL_RS, 13=WWLLPY_LZ, 14=WWLLPY_RS, 15=WWLL_LZ, 16=WWLL_RS
 if(dataset=="Yintro_exp1"){
         if(cell_type=="LZandRS"){

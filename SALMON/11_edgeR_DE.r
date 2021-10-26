@@ -29,8 +29,12 @@ library(biomaRt)
 library(matrixStats)
 
 print("Setting up DGE object...")
-mydata<-read.table("salmon_output.counts.txt")
-mylengths<-read.table("salmon_output.lengths.txt")
+#OLD - No decoys for salmon mapping
+#mydata<-read.table("salmon_output.counts.txt")
+#mylengths<-read.table("salmon_output.lengths.txt")
+#New version with Salmon's premade mm10 index that includes decoys
+mydata<-read.table("salmon_output.counts.premadeIndex.txt")
+mylengths<-read.table("salmon_output.lengths.premadeIndex.txt")
 #For Y intro data, 1=CCPP_LZ, 2=CCPP_RS, 3=CCPPLY_LZ, 4=CCPPLY_RS, 5=LLPP_LZ, 6=LLPP_RS, 7=LLPPLY_LZ, 8=LLPPLY_RS, 9=PPLLPY_LZ, 10=PPLLPY_RS, 11=PPLL_LZ, 12=PPLL_RS, 13=WWLLPY_LZ, 14=WWLLPY_RS, 15=WWLL_LZ, 16=WWLL_RS
 #For appropriate comparisons in Erica's dataset (2017 MBE paper)
 contrast_to_larson<-c("CCPP_RSvsPPLL_RS", "PPLL_RSvsWWLL_RS", "LLPP_RSvsWWLL_RS", "CCPP_RSvsLLPP_RS")
@@ -256,18 +260,34 @@ for(c in names(contrast_to_larson)){
 	}
 	this_df<-as.data.frame(cbind(this_table, chr=this_chrs, chr_type, larson_DE))
 	#print(head(this_df))
-	if(c %in% c("CCPP_RSvsCCPPLY_RS", "WWLL_RSvsWWLLPY_RS", "CCPP_RSvsWWLLPY_RS", "LLPPLY_RSvsPPLL_RS")){
-		#using -logFC on x-axis because edgeR comparison was done in the opposite direction from what we want
-		p<-ggplot(this_df, aes(x=-logFC, y=-log10(FDR), color=chr_type, shape=larson_DE)) + geom_point()
-		p<-p + labs(title=paste("Volcano plot:", i, "- REVERSE"), x="logFC", y="-log10(FDR-corrected P-value)")
-	} else{
-		p<-ggplot(this_df, aes(x=logFC, y=-log10(FDR), color=chr_type, shape=larson_DE)) + geom_point()
-		p<-p + labs(title=paste("Volcano plot:", i), x="logFC", y="-log10(FDR-corrected P-value)")
+	#All chrs together
+#	if(c %in% c("CCPP_RSvsCCPPLY_RS", "WWLL_RSvsWWLLPY_RS", "CCPP_RSvsWWLLPY_RS", "LLPPLY_RSvsPPLL_RS")){
+#		#using -logFC on x-axis because edgeR comparison was done in the opposite direction from what we want
+#		p<-ggplot(this_df, aes(x=-logFC, y=-log10(FDR), color=chr_type, shape=larson_DE)) + geom_point()
+#		p<-p + labs(title=paste("Volcano plot:", i, "- REVERSE"), x="logFC", y="-log10(FDR-corrected P-value)")
+#	} else{
+#		p<-ggplot(this_df, aes(x=logFC, y=-log10(FDR), color=chr_type, shape=larson_DE)) + geom_point()
+#		p<-p + labs(title=paste("Volcano plot:", i), x="logFC", y="-log10(FDR-corrected P-value)")
+#	}
+#	p<-p + theme(axis.text = element_text(size=18), axis.title = element_text(size=21), plot.title = element_text(size=36))
+#	p<-p + theme_minimal() + scale_color_manual(values=c('grey','coral4', 'cornflowerblue'))
+#	p<-p + geom_hline(yintercept = -log10(0.05))
+#	print(p)
+	#X and Y separate
+	for(j in c("X","Y","auto")){
+		if(c %in% c("CCPP_RSvsCCPPLY_RS", "WWLL_RSvsWWLLPY_RS", "CCPP_RSvsWWLLPY_RS", "LLPPLY_RSvsPPLL_RS")){
+			#using -logFC on x-axis because edgeR comparison was done in the opposite direction from what we want
+			p<-ggplot(this_df[which(this_df$chr_type==j),], aes(x=-logFC, y=-log10(FDR), shape=larson_DE)) + geom_point()
+			p<-p + labs(title=paste("Volcano plot:", i, "- REVERSE; chromosome", j), x="logFC", y="-log10(FDR-corrected P-value)")
+		} else{
+			p<-ggplot(this_df[which(this_df$chr_type==j),], aes(x=logFC, y=-log10(FDR), shape=larson_DE)) + geom_point()
+			p<-p + labs(title=paste("Volcano plot:", i, "; chromosome", j), x="logFC", y="-log10(FDR-corrected P-value)")
+		}
+		p<-p + theme(axis.text = element_text(size=18), axis.title = element_text(size=21), plot.title = element_text(size=36))
+		p<-p + theme_minimal()
+		p<-p + geom_hline(yintercept = -log10(0.05))
+		print(p)
 	}
-	p<-p + theme(axis.text = element_text(size=18), axis.title = element_text(size=21), plot.title = element_text(size=36))
-	p<-p + theme_minimal() + scale_color_manual(values=c('grey','coral4', 'cornflowerblue'))
-	p<-p + geom_hline(yintercept = -log10(0.05))
-	print(p)
 }
 dev.off()
 

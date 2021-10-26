@@ -4,11 +4,12 @@ library(biomaRt)
 library(ggplot2)
 library(ggbeeswarm)
 
-dataset<-"Yintro_exp2"
-cell_type<-"LZ"
+dataset<-"Yintro_exp1"
+cell_type<-"RS"
 
 #Read in data
 fpkm<-read.table(paste("fpkm_filtered_table", dataset, cell_type, "97.txt", sep="."), header=TRUE)
+#fpkm<-read.table(paste("fpkm_full_table", dataset, cell_type, "97.txt", sep="."), header=TRUE)
 
 #Get gene coordinates
 ens_mus<-useMart(biomart="ENSEMBL_MART_ENSEMBL", dataset="mmusculus_gene_ensembl")
@@ -23,6 +24,12 @@ y_genes<-all_genes$geneID[which(all_genes$seqnames=="Y")]
 fpkm_auto<-fpkm[which(rownames(fpkm) %in% auto_genes),]
 fpkm_x<-fpkm[which(rownames(fpkm) %in% x_genes),]
 fpkm_y<-fpkm[which(rownames(fpkm) %in% y_genes),]
+
+print("Dimensions of auto, X, and Y fpkm DFs:")
+print(dim(fpkm_auto))
+print(dim(fpkm_x))
+print(dim(fpkm_y))
+print(head(fpkm_y))
 
 if(dataset=="Yintro_exp1"){
 	cross_types<-c("CCPP","CPLY","WLPY","WWLL")
@@ -94,7 +101,7 @@ px<-px + scale_x_discrete(limits=cross_types) + ylim(0,1)
 py<-ggplot(ratio_ya_df, aes(x=group, y=ratio)) + geom_boxplot() + geom_quasirandom()
 py<-py + labs(title="Median expression ratio Y:auto", x="", y="Y:auto") + theme_minimal()
 py<-py + theme(axis.text=element_text(size=18), axis.title=element_text(size=21), plot.title=element_text(size=28))
-py<-py + scale_x_discrete(limits=cross_types) + ylim(0,1)
+py<-py + scale_x_discrete(limits=cross_types) + ylim(0,2)
 print(px)
 print(py)
 dev.off()

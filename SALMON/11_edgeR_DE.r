@@ -396,11 +396,6 @@ for(i in ls(pat="\\.DE\\.")){
 	names(prop_DE_down)<-major_chrs
 	names(DE_count)<-major_chrs
 	names(exp_count)<-major_chrs
-	#print(prop_DE)
-	#print(prop_DE_up)
-	#print(prop_DE_down)
-	#print(DE_up_autos/length(all_auto))
-        #print(DE_down_autos/length(all_auto))
         prop_DE_up_mergeAutos<-c(DE_up_autos/length(all_auto), prop_DE_up["X"], prop_DE_up["Y"])
         prop_DE_down_mergeAutos<-c(DE_down_autos/length(all_auto), prop_DE_down["X"], prop_DE_down["Y"])
         names(prop_DE_up_mergeAutos)<-c("auto","X","Y")
@@ -423,11 +418,8 @@ for(i in ls(pat="\\.DE\\.")){
 		print("Up vs down, Y:")
 		print(prop.test(c(prop_DE_up["Y"]*exp_count["Y"], prop_DE_down["Y"]*exp_count["Y"]), c(DE_count["Y"], DE_count["Y"])))
 	}
-	#barplot(prop_DE_up, main=i, ylim=c(-1,1))
-        #barplot(-prop_DE_down, add = TRUE)
         barplot(-prop_DE_up_mergeAutos, main=paste(i, "- REVERSE"), ylim=c(-1,1))
         barplot(prop_DE_down_mergeAutos, add = TRUE)
-	#barplot(prop_DE, main=i)
 	#Control for multiple test and print which cell type and chromosome significantly differs from expected
 	padjust_all<-p.adjust(c(pvalues_lower, pvalues_higher), "fdr")
 	padjust_lower<-padjust_all[1:length(pvalues_lower)]
@@ -446,13 +438,6 @@ for(i in ls(pat="\\.DE\\.")){
 		}
 	}
 }
-#if(procoOnly){
-#        pdf(paste("prop_DE_genes.barplots",dataset,"procoOnly.pdf", sep="."))
-#} else{
-#        pdf(paste("prop_DE_genes.barplots",dataset,"pdf", sep="."))
-#}
-#barplot(prop_DE_up_all, main="Proportion of genes that are DE", ylim=c(-1,1))
-#barplot(-prop_DE_down_all, add = TRUE)
 dev.off()
 
 print("Done with 11_edgeR_DE.r")

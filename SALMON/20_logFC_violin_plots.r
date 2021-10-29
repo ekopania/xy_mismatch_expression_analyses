@@ -4,7 +4,7 @@ library(ggplot2)
 library(ggbeeswarm)
 
 dataset<-"Yintro_exp2"
-cell_type<-"LZ"
+cell_type<-"RS"
 
 #Read in data
 fpkm_data<-read.table(paste("fpkm_filtered_table",dataset,cell_type,"97.txt", sep="."), header=TRUE)
@@ -19,10 +19,10 @@ if(dataset=="Yintro_exp1"){
                 domX<-read.table("topDEgenes.lrt.DE.WWLL_LZvsWWLLPY_LZ.txt", header=TRUE, fill=TRUE)
                 domY<-read.table("topDEgenes.lrt.DE.CCPPLY_LZvsWWLL_LZ.txt", header=TRUE, fill=TRUE)
         } else if(cell_type=="RS"){
-                musX<-read.table("topDEgenes.lrt.DE.CCPP_RSvsCCPPLY_RS.withGeneNames.txt", header=TRUE, fill=TRUE)
-                musY<-read.table("topDEgenes.lrt.DE.CCPP_RSvsWWLLPY_RS.withGeneNames.txt", header=TRUE, fill=TRUE)
-                domX<-read.table("topDEgenes.lrt.DE.WWLL_RSvsWWLLPY_RS.withGeneNames.txt", header=TRUE, fill=TRUE)
-                domY<-read.table("topDEgenes.lrt.DE.CCPPLY_RSvsWWLL_RS.withGeneNames.txt", header=TRUE, fill=TRUE)
+                musX<-read.table("topDEgenes.lrt.DE.CCPP_RSvsCCPPLY_RS.txt", header=TRUE, fill=TRUE)
+                musY<-read.table("topDEgenes.lrt.DE.CCPP_RSvsWWLLPY_RS.txt", header=TRUE, fill=TRUE)
+                domX<-read.table("topDEgenes.lrt.DE.WWLL_RSvsWWLLPY_RS.txt", header=TRUE, fill=TRUE)
+                domY<-read.table("topDEgenes.lrt.DE.CCPPLY_RSvsWWLL_RS.txt", header=TRUE, fill=TRUE)
         } else{
                 stop("Invalid cell type: must be 'LZ' or 'RS'")
         }
@@ -35,10 +35,10 @@ if(dataset=="Yintro_exp1"){
                 domX<-read.table("topDEgenes.lrt.DE.LLPP_LZvsLLPPLY_LZ.txt", header=TRUE, fill=TRUE)
                 domY<-read.table("topDEgenes.lrt.DE.LLPPLY_LZvsPPLL_LZ.txt", header=TRUE, fill=TRUE)
         } else if(cell_type=="RS"){
-                musX<-read.table("topDEgenes.lrt.DE.PPLL_RSvsPPLLPY_RS.withGeneNames.txt", header=TRUE, fill=TRUE)
-                musY<-read.table("topDEgenes.lrt.DE.LLPP_RSvsPPLLPY_RS.withGeneNames.txt", header=TRUE, fill=TRUE)
-                domX<-read.table("topDEgenes.lrt.DE.LLPP_RSvsLLPPLY_RS.withGeneNames.txt", header=TRUE, fill=TRUE)
-                domY<-read.table("topDEgenes.lrt.DE.LLPPLY_RSvsPPLL_RS.withGeneNames.txt", header=TRUE, fill=TRUE)
+                musX<-read.table("topDEgenes.lrt.DE.PPLL_RSvsPPLLPY_RS.txt", header=TRUE, fill=TRUE)
+                musY<-read.table("topDEgenes.lrt.DE.LLPP_RSvsPPLLPY_RS.txt", header=TRUE, fill=TRUE)
+                domX<-read.table("topDEgenes.lrt.DE.LLPP_RSvsLLPPLY_RS.txt", header=TRUE, fill=TRUE)
+                domY<-read.table("topDEgenes.lrt.DE.LLPPLY_RSvsPPLL_RS.txt", header=TRUE, fill=TRUE)
         } else{
                 stop("Invalid cell type: must be 'LZ' or 'RS'")
         }

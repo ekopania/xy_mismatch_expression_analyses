@@ -4,7 +4,7 @@ library(ggplot2)
 library(ggbeeswarm)
 
 dataset<-"LarsonEtal"
-cell_type<-"LZ"
+cell_type<-"RS"
 
 #Read in data
 fpkm_data<-read.table(paste("fpkm_filtered_table",dataset,cell_type,"97.txt", sep="."), header=TRUE)

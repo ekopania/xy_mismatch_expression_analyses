@@ -21,10 +21,11 @@ win_size=10 #Window size in kb
 #chr=1
 #genome="REFS/LEWES_EiJ.pseudogenome.forBedtools.genome"
 #genome="REFS/WSB.newVariants.forBedtools.genome"
-genome="REFS/PWK_PhJ.hapCallerRef.forBedtools.genome"
-ref="PWK"
+#genome="REFS/PWK_PhJ.hapCallerRef.forBedtools.genome"
+genome="REFS/Mus_musculus.GRCm38.dna.primary_assembly.forBedtools.genome"
+ref="LEWES"
 sample="PWKLY"
-in_vcf="${sample}.to${ref}.filter.vcf"
+in_vcf="${sample}.to${ref}.hardFilter.lifted_over.vcf" #"${sample}.to${ref}.filter.vcf"
 
 #Make windows
 if [ -f "windows.${sample}.to${ref}.${win_size}kb.bed" ]; then
@@ -44,6 +45,6 @@ else
 fi
 
 #Plot number of variants in each window
-Rscript 11_plot_vars.r "counts.${sample}.to${ref}.${win_size}kbWindows.txt"
+Rscript 09_plot_vars.r "counts.${sample}.to${ref}.${win_size}kbWindows.txt"
 
 echo "Done!"

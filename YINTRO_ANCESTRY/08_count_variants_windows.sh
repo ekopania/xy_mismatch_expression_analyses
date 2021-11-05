@@ -44,6 +44,6 @@ else
 fi
 
 #Plot number of variants in each window
-Rscript 08_plot_vars.r "counts.${sample}.to${ref}.${win_size}kbWindows.txt"
+Rscript 11_plot_vars.r "counts.${sample}.to${ref}.${win_size}kbWindows.txt"
 
 echo "Done!"

@@ -22,9 +22,9 @@ conda activate ek_main_enviro
 
 #ulimit -n 8024
 
-in_vcf="PWKLY.toLEWES.hardFilter.vcf"
-out_vcf="PWKLY.toLEWES.hardFilter.lifted_over.vcf"
-chain_file="REFS/REF-to-LEWES_EiJ.formatted.chain"
+in_vcf="LEWPY.toPWK.hardFilter.vcf"
+out_vcf="LEWPY.toPWK.hardFilter.lifted_over.vcf"
+chain_file="REFS/REF-to-PWK_PhJ.formatted.chain"
 ref="REFS/Mus_musculus.GRCm38.dna.primary_assembly.fa"
 
 CrossMap.py vcf ${chain_file}  ${in_vcf}  ${ref}  ${out_vcf} --no-comp-alleles  

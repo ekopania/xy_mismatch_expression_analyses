@@ -4,8 +4,8 @@ library(biomaRt)
 library(vegan)
 library(ggplot2)
 
-dataset<-"Yintro_exp1"
-cell_type<-"RS"
+dataset<-"Yintro_exp2"
+cell_type<-"LZ"
 procoOnly<-FALSE
 
 #Read in data
@@ -40,7 +40,7 @@ fpkm_auto<-fpkm_data[which(rownames(fpkm_data) %in% auto_genes),]
 fpkm_x<-fpkm_data[which(rownames(fpkm_data) %in% x_genes),]
 fpkm_y<-fpkm_data[which(rownames(fpkm_data) %in% y_genes),]
 
-pdf(paste("expression_difference_hist",dataset,cell_type,"pdf", sep="."), onefile=TRUE)
+pdf(paste("expression_difference_hist.noY",dataset,cell_type,"pdf", sep="."), onefile=TRUE)
 for(c in names(cross_types)){
 	print(paste("Working on cross type:", c))
 	#Get fpkms for each cross type in comparison
@@ -82,19 +82,26 @@ for(c in names(cross_types)){
 	#print(head(df_auto))
 	#Setting y=..count../sum(..count..)) should make the y=axis of histogram proportion of total
 	p<-ggplot(df_auto, aes(x)) + geom_histogram(aes(x=auto, y=..count../sum(..count..)), fill="black", binwidth=diff(range(df_auto$auto))/30)
-	p<-p + geom_histogram(data=df_x, aes(x=X, y=-..count../sum(..count..)), fill="lightgrey", alpha=0.5, binwidth=diff(range(df_x$X))/30)
-	p<-p + geom_histogram(data=df_y, aes(x=Y, y=-..count../sum(..count..)), fill="darkgrey", alpha=0.5, binwidth=diff(range(df_y$Y))/30)
+	p<-p + geom_histogram(data=df_x, aes(x=X, y=-..count../sum(..count..)), fill="#600363", alpha=0.9, binwidth=diff(range(df_x$X))/30)
+	#p<-p + geom_histogram(data=df_y, aes(x=Y, y=-..count../sum(..count..)), fill="#67845C", alpha=0.9, binwidth=diff(range(df_y$Y))/30)
 	p<-p + labs(title=paste("Histogram of normalized gene expression:\n",cross_types[[c]][1],"vs",cross_types[[c]][2]), x="Normalized FPKM Difference", y="Proportion of Genes")
 	p<-p + theme_minimal() + xlim(-0.6, 0.6) + ylim(-0.3, 0.3)
 	p<-p + theme(axis.text=element_text(size=18), axis.title=element_text(size=21), plot.title=element_text(size=22))
 	print(p + coord_flip())
 	#Kolmogorov-Smirnov tests
-	print("autos vs X:")
-	print(ks.test(df_auto$auto, df_x$X))
-	print("autos vs Y:")
-	print(ks.test(df_auto$auto, df_y$Y))
-	print("X vs Y:")
-	print(ks.test(df_x$X, df_y$Y))
+	#print("autos vs X:")
+	#print(ks.test(df_auto$auto, df_x$X))
+	#print("autos vs Y:")
+	#print(ks.test(df_auto$auto, df_y$Y))
+	#print("X vs Y:")
+	#print(ks.test(df_x$X, df_y$Y))
+	#Mann Whitney (Wilcoxon) tests
+        print("autos vs X:")
+        print(wilcox.test(df_auto$auto, df_x$X))
+        print("autos vs Y:")
+        print(wilcox.test(df_auto$auto, df_y$Y))
+        print("X vs Y:")
+        print(wilcox.test(df_x$X, df_y$Y))
 }
 dev.off()
 

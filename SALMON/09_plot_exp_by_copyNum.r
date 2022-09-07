@@ -203,18 +203,19 @@ mydf<-as.data.frame(rbind(exp1_df,exp2_df)) #,larson_df))
 print(mydf)
 
 #Plot
-#Colors: CCPP 9B1D20, CCPPLY C86756, LLPP 7C898B (OLD: A5535A), LLPPLY DFAEB4 (OLD:813E5D), PPLL BBBDF6 (OLD: 391463), PPLLPY 053B06 (OLD: 3A0842), WWLL 023C8D, WWLLPY 59A5B1
+#Colors: CCPP 0072B2, CCPPLY D55E00, LLPP CC79A7, LLPPLY F0E442, PPLL 56B4E9, PPLLPY E69F00, WWLL 000000, WWLLPY 009E73
 pdf(paste("geneFam_expression_by_copyNumber",cell_type,"Yintro_expOnly.pdf", sep="."))
 for(g in gene_fams){
 	my_df<-as.data.frame(mydf[which(mydf$gene_family==g),])
 	print(head(my_df))
 	cn_range<-diff(range(my_df$copy_number))
-	p<-ggplot(my_df, aes(x=copy_number, y=as.numeric(as.character(expression)), fill=cross_type, color=cross_type)) + geom_point(size=4, position = position_dodge(width=cn_range/25)) 
+	p<-ggplot(my_df, aes(x=copy_number, y=as.numeric(as.character(expression)), fill=cross_type, color=cross_type, shape=cross_type)) + geom_point(size=6, position = position_dodge(width=cn_range/25)) 
 	p<-p + stat_summary(fun="mean", geom="point", size=10, shape="+", position = position_dodge(width=cn_range/25))
 	p<-p + stat_summary(aes(x=copy_number, y=as.numeric(as.character(expression))), geom="errorbar", fun.data="mean_sdl", fun.args=list(mult=1), size=2, width=cn_range/10, position = position_dodge(width=cn_range/25))
 	p<-p + labs(title=paste("Expression vs Copy Number - ",g), x="Copy Number", y="Median Gene Family TPM")
 	p<-p + theme(axis.text=element_text(size=18), axis.title=element_text(size=21), plot.title=element_text(size=28))
-	p<-p + theme_minimal() + scale_color_manual(values=c("#9B1D20","#C86756","#7C898B","#DFAEB4","#BBBDF6","#053B06","#59A5B1","#023C8D"))
+	p<-p + theme_minimal() + scale_color_manual(values=c("#0072B2","#D55E00","#CC79A7","#F0E442","#E69F00","#56B4E9","#009E73","#000000"))
+	p<-p + scale_shape_manual(values=c(15,19,17,18,6,8,11,14))
 	print(p)
 }
 dev.off()
